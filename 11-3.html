@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="utf-8">
+		<title>ムシキング</title>
+		<style>
+			*{margin:0px;padding:0px;}
+			.box1{
+				width: 194px;
+				height: 141px;
+				margin: 20px 0px;
+				transform:translateX(-300px) ;
+				transform:translateY(170px) ;
+				background-image:url(mushi1.png);
+			}
+			.box2{
+				width: 194px;
+				height: 141px;
+				margin: 50px 200px;
+				transform:translateX(300px) ;
+				transform:translateY(-30px) ;
+				background-image:url(mushi2.png);
+			}
+			.box3{
+				width: 150px;
+				height: 150px;
+				margin: 0px 0px;
+				transform:translateY(-400px) ;
+			}
+			.box4{
+				width: 150px;
+				height: 150px;
+				margin: 0px 200px;
+				transform:translateY(-550px) ;
+			}
+			.box5{
+				width: 100px;
+				height: 20px;
+				margin: 0px 0px;
+				transform:translateY(-550px) ;
+			}
+			.box6{
+				width: 100px;
+				height: 20px;
+				margin: 0px 200px;
+				transform:translateY(-570px) ;
+			}
+			@keyframes lose{
+                0%{transform:rotateY(0deg) translateY(150px);}
+                100%{transform:rotateY(-180deg) translateY(150px);}
+            }
+			@keyframes win{
+                0%{transform:rotateY(0deg);}
+                100%{transform:rotateY(180deg);}
+            }
+
+		</style>
+    </head>
+    <body>
+		<p id="output1" ></p>
+        <button onclick='janken("グー")'　id="gu">グー</button>
+        <button onclick='janken("チョキ")'　id="chi">チョキ</button>
+        <button onclick='janken("パー")'　id="pa">パー</button>
+		<div class="box1" id="box1">あなた</div>
+		<div class="box2" id="box2">　　　　　　あいて</div>
+		<div class="box3" id="box3"></div>
+		<div class="box4" id="box4"></div>
+		<div class="box5" id="box5">HP 100</div>
+		<div class="box6" id="box6">HP 100</div>
+        <script>
+            const OUTPUT1=document.getElementById("output1");
+			const BOX1=document.getElementById("box1");
+			const BOX2=document.getElementById("box2");
+			const BOX3=document.getElementById("box3");
+			const BOX4=document.getElementById("box4");
+			const BOX5=document.getElementById("box5");
+			const BOX6=document.getElementById("box6");
+            const AUDIO1=new Audio();
+            AUDIO1.src="decision17.mp3";
+            const AUDIO2=new Audio();
+            AUDIO2.src="cancel6.mp3";
+            const AUDIO3=new Audio();
+            AUDIO3.src="cork-plug2.mp3";
+            let myhp=100;
+            let yourhp=100;
+            let judge;
+            function janken(player){
+                let pc=Math.floor(Math.random()*3);
+                if(pc===0){
+					pc="グー";
+					BOX4.style.backgroundImage="url(gu.png)";
+				}
+                if(pc===1){
+					pc="チョキ";
+					BOX4.style.backgroundImage="url(chi.png)";
+				}
+                if(pc===2){
+					pc="パー";
+					BOX3.style.backgroundImage="url(pa.png)";
+				}
+                if(player==="グー"){
+					BOX3.style.backgroundImage="url(gu.png)";
+                    if(pc==="グー"){aiko();}
+                    if(pc==="チョキ"){kati();}
+                    if(pc==="パー"){make();}
+                }
+                if(player==="チョキ"){
+					BOX3.style.backgroundImage="url(chi.png)";
+                    if(pc==="グー"){make();}
+                    if(pc==="チョキ"){aiko();}
+                    if(pc==="パー"){kati();}
+                }
+                if(player==="パー"){
+					BOX3.style.backgroundImage="url(pa.png)";
+                    if(pc==="グー"){kati();}
+                    if(pc==="チョキ"){make();}
+                    if(pc==="パー"){aiko();}
+                }
+                function make(){
+                    judge="負け";
+                    myhp-=15;
+                    AUDIO2.currentTime=0;
+                    AUDIO2.play();
+					BOX5.innerHTML="HP "+myhp;
+					BOX2.style.animation="youra 0.5s linear 0s 1 normal";
+                }
+                function kati(){
+                    judge="勝ち";
+                    yourhp-=15;
+                    AUDIO1.currentTime=0;
+                    AUDIO1.play();
+					BOX6.innerHTML="HP "+yourhp;
+					BOX1.style.animation="mya 0.5s linear 0s 1 normal";
+                }
+                function aiko(){
+                    judge="あいこ";
+                    myhp-=5;
+                    yourhp-=5;
+                    AUDIO3.currentTime=0;
+                    AUDIO3.play();
+					BOX5.innerHTML="HP "+myhp;
+					BOX6.innerHTML="HP "+yourhp;
+                }
+                if(myhp<=0){
+                    myhp=0;
+					BOX5.innerHTML="HP "+myhp;
+					OUTPUT1.innerHTML="LOSE…";
+					BOX1.style.animation="lose 1s linear 0s 1 normal";
+					BOX1.style.animationFillMode="both";
+				}
+                if(yourhp<=0){
+                    yourhp=0;
+					BOX6.innerHTML="HP "+yourhp;
+					OUTPUT1.innerHTML="WIN!";
+					BOX2.style.animation="win 1s linear 0s 1 normal";
+					BOX2.style.animationFillMode="both";
+                }
+            }
+        </script>
+    </body>
+</html>
